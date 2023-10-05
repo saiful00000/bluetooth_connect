@@ -17,9 +17,9 @@ import com.shaiful.bluetoothconnect.ui.viewmodels.HomeViewModel
 @Composable
 fun PairedDevicesScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 
-    homeViewModel.checkBluetoothPermissions(LocalContext.current)
-
     val allPermissionsGranted by homeViewModel.bluetoothPermissionGranted.collectAsState()
+
+    homeViewModel.checkALlBluetoothPermissionsAreGranted(LocalContext.current)
 
     Column(
         verticalArrangement = Arrangement.Center,
