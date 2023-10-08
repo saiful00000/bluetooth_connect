@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,31 +21,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.shaiful.bluetoothconnect.R
+import com.shaiful.bluetoothconnect.ui.routes.RouteNames
+import com.shaiful.bluetoothconnect.ui.widgets.AppTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-    Scaffold(topBar = {
-        TopAppBar(title = {
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.bluetooth),
-                    contentDescription = "bluetooth image",
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(text = "Connect")
+fun HomeScreen(navController: NavHostController) {
+    Scaffold(
+        topBar = {
+            AppTopAppBar(title = "Connect")
+        },
+        content = { contentPadding ->
+            Column(
+                modifier = Modifier.padding(contentPadding)
+            ) {
+                PairedDevicesScreen()
             }
-        })
-    }, content = { contentPadding ->
-        Column(
-            modifier = Modifier.padding(contentPadding)
-        ) {
-            PairedDevicesScreen()
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(RouteNames.DeviceScannerScreen.name)
+                }
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Fav Icon")
+            }
         }
-    })
+    )
 }
