@@ -27,7 +27,6 @@ import com.shaiful.bluetoothconnect.ui.routes.RouteNames
 import com.shaiful.bluetoothconnect.ui.screens.DeviceScannerScreen
 import com.shaiful.bluetoothconnect.ui.screens.HomeScreen
 import com.shaiful.bluetoothconnect.ui.screens.MessagingScreen
-import com.shaiful.bluetoothconnect.ui.screens.PairedDevicesScreen
 import com.shaiful.bluetoothconnect.ui.theme.BluetoothConnectTheme
 import com.shaiful.bluetoothconnect.ui.viewmodels.BluetoothViewModel
 import com.shaiful.bluetoothconnect.ui.viewmodels.HomeViewModel
@@ -116,6 +115,15 @@ class MainActivity : ComponentActivity() {
                     * */
                     bluetoothAdapter.startDiscovery()
 
+                    /*
+                    * Make this device discoverable to other devices
+                    * */
+                    val requestCode = 1;
+                    val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
+                        putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
+                    }
+                    startActivityForResult(discoverableIntent, requestCode)
+
                     onDispose {}
                 }
 
@@ -129,11 +137,12 @@ class MainActivity : ComponentActivity() {
                             bluetoothViewModel = bluetoothViewModel
                         )
                     }
-//                    composable(RouteNames.PairedDevicesScreen.name) {
-//                        PairedDevicesScreen()
-//                    }
                     composable(RouteNames.DeviceScannerScreen.name) {
-                        DeviceScannerScreen(bluetoothViewModel = bluetoothViewModel)
+                        DeviceScannerScreen(
+                            bluetoothViewModel = bluetoothViewModel,
+                            bluetoothAdapter = bluetoothAdapter,
+                            navHostController = navController,
+                        )
                     }
                     composable(RouteNames.MessagingScreen.name) {
                         MessagingScreen()

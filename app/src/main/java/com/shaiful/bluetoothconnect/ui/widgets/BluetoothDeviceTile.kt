@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 
 @SuppressLint("MissingPermission")
 @Composable
-fun BluetoothDeviceTile(device: BluetoothDevice) {
+fun BluetoothDeviceTile(device: BluetoothDevice, index: Int) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -28,6 +28,9 @@ fun BluetoothDeviceTile(device: BluetoothDevice) {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
+            Text(
+                text = "$index"
+            )
             Text(
                 text = "Name: ${device.name ?: "Unknown"}",
                 fontWeight = FontWeight.Bold

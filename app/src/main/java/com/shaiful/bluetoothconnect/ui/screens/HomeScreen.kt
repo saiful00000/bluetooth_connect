@@ -34,13 +34,16 @@ import com.shaiful.bluetoothconnect.ui.widgets.BluetoothDeviceTile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController, bluetoothViewModel: BluetoothViewModel) {
+fun HomeScreen(
+    navController: NavHostController,
+    bluetoothViewModel: BluetoothViewModel,
+) {
 
     val pairedDevices by bluetoothViewModel.pairedDevices.collectAsState()
 
     Scaffold(
         topBar = {
-            AppTopAppBar(title = "Connect")
+            AppTopAppBar(title = "Connect", onReload = null)
         },
         content = { contentPadding ->
 

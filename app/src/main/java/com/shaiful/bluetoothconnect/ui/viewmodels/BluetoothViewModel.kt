@@ -29,7 +29,7 @@ class BluetoothViewModel @Inject constructor() : ViewModel() {
     fun addUnpairedDevice(device: BluetoothDevice) {
         val previousDevices = _unpairedDevices.value.toMutableList()
         previousDevices.add(device)
-        _unpairedDevices.value = previousDevices
+        _unpairedDevices.value = previousDevices.toSet().toList()
         _logInfo("New device added to unpaired device list. device name -> $device")
     }
 
