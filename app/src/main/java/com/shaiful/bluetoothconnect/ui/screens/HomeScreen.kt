@@ -30,7 +30,6 @@ import com.shaiful.bluetoothconnect.R
 import com.shaiful.bluetoothconnect.ui.routes.RouteNames
 import com.shaiful.bluetoothconnect.ui.viewmodels.BluetoothViewModel
 import com.shaiful.bluetoothconnect.ui.widgets.AppTopAppBar
-import com.shaiful.bluetoothconnect.ui.widgets.BluetoothDeviceTile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +49,7 @@ fun HomeScreen(
             Column(
                 modifier = Modifier.padding(contentPadding)
             ) {
-                PairedDevicesScreen(pairedDevices)
+                PairedDevicesScreen(pairedDevices, bluetoothViewModel)
             }
         },
         floatingActionButton = {

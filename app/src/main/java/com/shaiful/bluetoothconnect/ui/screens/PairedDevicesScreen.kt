@@ -22,12 +22,27 @@ import com.shaiful.bluetoothconnect.ui.widgets.BluetoothDeviceTile
 
 //val storyPosts by viewModel.storyPosts.collectAsStateWithLifecycle()
 @Composable
-fun PairedDevicesScreen(pairedDevices: List<BluetoothDevice>) {
+fun PairedDevicesScreen(
+    pairedDevices: List<BluetoothDevice>,
+    bluetoothViewModel: BluetoothViewModel,
+) {
 
     LazyColumn(
-    ){
+    ) {
         itemsIndexed(pairedDevices) { index, device ->
-            BluetoothDeviceTile(device = device, index = index)
+            BluetoothDeviceTile(
+                device = device,
+                index = index,
+                onBond = {
+                         bluetoothViewModel.pairThisDevice(device)
+                },
+                onUnBond = {
+                    bluetoothViewModel.unPairThisDevice(device)
+                },
+                onConnect = {
+                    bluetoothViewModel.connectThisDevice(device)
+                },
+            )
         }
     }
 }

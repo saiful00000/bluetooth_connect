@@ -1,5 +1,6 @@
 package com.shaiful.bluetoothconnect.ui.viewmodels
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -22,7 +23,7 @@ class BluetoothViewModel @Inject constructor() : ViewModel() {
     private val _pairedDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
     val pairedDevices: StateFlow<List<BluetoothDevice>> = _pairedDevices.asStateFlow()
 
-    private fun _logInfo(message: String) {
+    private fun logInfo(message: String) {
         Log.i("Bluetooth ViewModel", message)
     }
 
@@ -30,19 +31,35 @@ class BluetoothViewModel @Inject constructor() : ViewModel() {
         val previousDevices = _unpairedDevices.value.toMutableList()
         previousDevices.add(device)
         _unpairedDevices.value = previousDevices.toSet().toList()
-        _logInfo("New device added to unpaired device list. device name -> $device")
+        logInfo("New device added to unpaired device list. device name -> $device")
     }
 
     fun addPairedDevices(devices: Set<BluetoothDevice>) {
         _pairedDevices.value = devices.toList()
-        _logInfo("New device added to paired device list. device name -> $devices")
+        logInfo("New device added to paired device list. device name -> $devices")
     }
 
     fun addPairedDevice(device: BluetoothDevice) {
         val previousDevices = _pairedDevices.value.toMutableList().toMutableSet()
         previousDevices.add(device)
         _pairedDevices.value = previousDevices.toList()
-        _logInfo("New device added to paired device list. device name -> $device")
+        logInfo("New device added to paired device list. device name -> $device")
+    }
+
+    @SuppressLint("MissingPermission")
+    fun pairThisDevice(device: BluetoothDevice) {
+        val pairResult = device.createBond()
+        logInfo("bluetooth pair result for ${device.address} is = $pairResult")
+    }
+
+    fun unPairThisDevice(device: BluetoothDevice) {
+//        val pairResult = device.createBond()
+        logInfo("bluetooth pair result for ${device.address} is = ")
+    }
+
+    fun connectThisDevice(device: BluetoothDevice) {
+//        val pairResult = device.conn()
+        logInfo("bluetooth pair result for ${device.address} is = ")
     }
 
 }

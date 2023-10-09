@@ -43,7 +43,19 @@ fun DeviceScannerScreen(
                 contentPadding = contentPadding
             ) {
                 itemsIndexed(deviceList.value) { index, device ->
-                    BluetoothDeviceTile(device = device, index = index)
+                    BluetoothDeviceTile(
+                        device = device,
+                        index = index,
+                        onBond = {
+                            bluetoothViewModel.pairThisDevice(device)
+                        },
+                        onUnBond = {
+                            bluetoothViewModel.unPairThisDevice(device)
+                        },
+                        onConnect = {
+                            bluetoothViewModel.connectThisDevice(device)
+                        },
+                    )
                 }
             }
         }
