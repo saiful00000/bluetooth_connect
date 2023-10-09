@@ -1,8 +1,10 @@
 package com.shaiful.bluetoothconnect
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -35,6 +37,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var homeViewModel: HomeViewModel
     lateinit var bluetoothViewModel: BluetoothViewModel
+    lateinit var bluetoothManager: BluetoothManager
+    lateinit var bluetoothAdapter: BluetoothAdapter
 
     val activityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -54,6 +58,7 @@ class MainActivity : ComponentActivity() {
         unregisterReceiver(bluetoothDeviceReceiver)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,6 +68,8 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 homeViewModel = hiltViewModel()
                 bluetoothViewModel = hiltViewModel()
+                bluetoothManager = ContextCompat.getSystemService<BluetoothManager>(context, BluetoothManager::class.java)!!
+                bluetoothAdapter = bluetoothManager.adapter!!
 
                 // Register for broadcasts when a device is discovered.
                 val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
@@ -96,6 +103,19 @@ class MainActivity : ComponentActivity() {
                         activityLauncher.launch(btIntent)
                     }
 
+                    /*
+                    * Get paired devices
+                    * */
+                    val devices = bluetoothAdapter.bondedDevices
+                    if(devices != null){
+                        bluetoothViewModel.addPairedDevices(devices)
+                    }
+
+                    /*
+                    * Start discover new/unpaired devices
+                    * */
+                    bluetoothAdapter.startDiscovery()
+
                     onDispose {}
                 }
 
@@ -106,13 +126,14 @@ class MainActivity : ComponentActivity() {
                     composable(RouteNames.HomeScreen.name) {
                         HomeScreen(
                             navController = navController,
+                            bluetoothViewModel = bluetoothViewModel
                         )
                     }
-                    composable(RouteNames.PairedDevicesScreen.name) {
-                        PairedDevicesScreen()
-                    }
+//                    composable(RouteNames.PairedDevicesScreen.name) {
+//                        PairedDevicesScreen()
+//                    }
                     composable(RouteNames.DeviceScannerScreen.name) {
-                        DeviceScannerScreen()
+                        DeviceScannerScreen(bluetoothViewModel = bluetoothViewModel)
                     }
                     composable(RouteNames.MessagingScreen.name) {
                         MessagingScreen()

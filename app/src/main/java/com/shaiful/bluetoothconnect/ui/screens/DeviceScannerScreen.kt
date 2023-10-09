@@ -26,10 +26,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shaiful.bluetoothconnect.ui.viewmodels.BluetoothViewModel
 import com.shaiful.bluetoothconnect.ui.widgets.AppTopAppBar
+import com.shaiful.bluetoothconnect.ui.widgets.BluetoothDeviceTile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeviceScannerScreen(bluetoothViewModel: BluetoothViewModel = hiltViewModel()) {
+fun DeviceScannerScreen(bluetoothViewModel: BluetoothViewModel) {
 
     val deviceList = bluetoothViewModel.unpairedDevices.collectAsState(initial = emptyList())
 
@@ -42,36 +43,9 @@ fun DeviceScannerScreen(bluetoothViewModel: BluetoothViewModel = hiltViewModel()
                 contentPadding = contentPadding
             ){
                 items(deviceList.value) { device ->
-                    BluetoothDeviceListItem(device = device)
-
+                    BluetoothDeviceTile(device = device)
                 }
             }
         }
     )
-}
-
-@SuppressLint("MissingPermission")
-@Composable
-fun BluetoothDeviceListItem(device: BluetoothDevice) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .background(Color.White),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Name: ${device.name ?: "Unknown"}",
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Address: ${device.address ?: "N/A"}"
-            )
-            // You can add more information about the Bluetooth device here if needed
-        }
-    }
 }
