@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,8 +58,15 @@ class BluetoothViewModel @Inject constructor() : ViewModel() {
         logInfo("bluetooth pair result for ${device.address} is = ")
     }
 
+    @SuppressLint("MissingPermission")
     fun connectThisDevice(device: BluetoothDevice) {
-//        val pairResult = device.conn()
+        try {
+            val MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+            val socket = device.createRfcommSocketToServiceRecord(MY_UUID);
+            socket.connect();
+        }catch (e: Exception) {
+            logInfo(e.toString())
+        }
         logInfo("bluetooth pair result for ${device.address} is = ")
     }
 
